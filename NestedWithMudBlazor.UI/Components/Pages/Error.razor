@@ -1,0 +1,26 @@
+﻿@page "/Error"
+@inject NavigationManager Manager
+
+<PageTitle>Error</PageTitle>
+
+<MudText Typo="Typo.h3">Error</MudText>
+<MudText Typo="Typo.h4">An error occurred while processing your request.</MudText>
+<br/>
+<MudText Typo="Typo.h4">Logging</MudText>
+<MudText Typo="Typo.body1">
+	The issue has been logged and will be reviewed by support. Please try your request again.
+</MudText>
+
+<MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(_ => { Manager.NavigateTo(Manager.Uri, true); })">Continue</MudButton>
+
+@code{
+
+	protected override void OnAfterRender(bool firstRender)
+	{
+		if (firstRender)
+		{
+			StateHasChanged();
+		}
+	}
+
+}

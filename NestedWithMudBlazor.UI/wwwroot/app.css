@@ -1,0 +1,5 @@
+/* Styles for table and datagrid header */
+.mud-table-toolbar {
+    background-color: var(--mud-palette-drawer-background) !important;
+    color: var(--mud-palette-drawer-text) !important;
+}
