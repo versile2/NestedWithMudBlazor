@@ -6,47 +6,46 @@
 
 <br />
 <MudDropContainer T="Element" Items="Elements" ItemsSelector="@((item,dropzone) => item.Index.ToString() == dropzone)"
-				  ItemDropped="ItemDropped" Class="d-flex flex-column flex-grow-1">
-	<ChildContent>
-		<MudSimpleTable>
-			<colgroup>
-				<col style="width: 75px;"/>
-				<col style="width: 75px;"/>
-				<col style="width: 175px;"/>
-				<col style="width: 75px;"/>
-				<col style="width: 75px;" />
-			</colgroup>
-			<thead>
-			<tr>
-				<th>Nr</th>
-				<th>Sign</th>
-				<th>Name</th>
-				<th>Position</th>
-				<th>Molar Mass</th>
-			</tr>
-			</thead>
-			<tbody>
-			@foreach (var row in Elements)
-			{
-				<MudPaper Class="ma-4 flex-grow-1">
-					<MudList T="string" Class="d-flex flex-column mud-height-full">
-							<MudDropZone T="Element" AllowReorder Identifier="@row.Index.ToString()" />
-					</MudList>
-				</MudPaper>
-			}
-			</tbody>
-		</MudSimpleTable>
-	</ChildContent>
-	<ItemRenderer>
-		<tr>
-			<td>@context.Id</td>
-			<td>@context.Sign</td>
-			<td>@context.Name</td>
-			<td>@context.Position</td>
-			<td>@context.Molar - @context.Index</td>
-		</tr>
-	</ItemRenderer>
+                  ItemDropped="ItemDropped" Class="d-flex flex-column flex-grow-1">
+    <ChildContent>
+        <MudGrid>
+            <MudItem xs="12">
+                <MudPaper Class="pa-4">
+                    <MudGrid>
+                        <MudItem xs="1">Nr</MudItem>
+                        <MudItem xs="1">Sign</MudItem>
+                        <MudItem xs="6">Name</MudItem>
+                        <MudItem xs="2">Position</MudItem>
+                        <MudItem xs="2">Molar Mass</MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+            @foreach (var row in Elements)
+            {
+                <MudItem xs="12">
+                    <MudPaper Class="pa-0">
+                        <MudDropZone T="Element" Identifier="@row.Index.ToString()" Class="py-2" />
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+    </ChildContent>
+    <ItemRenderer>
+        <MudGrid>
+            <MudItem xs="1">@context.Id</MudItem>
+            <MudItem xs="1">@context.Sign</MudItem>
+            <MudItem xs="6">@context.Name</MudItem>
+            <MudItem xs="2">@context.Position</MudItem>
+            <MudItem xs="2">@context.Molar</MudItem>
+        </MudGrid>
+    </ItemRenderer>
 </MudDropContainer>
+
+<style>
+    .mud-drop-zone {
+        min-height: 40px;
+    }
+</style>
 
 
 @code {
@@ -68,14 +67,6 @@
 		new Element() { Id = 3, Index = 2, Sign = "Li", Name = "Lithium", Position = 0, Molar = 6.941 }
 	};
 
-	protected override void OnAfterRender(bool firstRender)
-	{
-		if (firstRender)
-		{
-			StateHasChanged();
-		}
-	}
-
 	private void ItemDropped(MudItemDropInfo<Element> dropItem)
 	{
 		var newIndex = int.Parse(dropItem.DropzoneIdentifier);
@@ -84,7 +75,10 @@
 		if (dropItem.IndexInZone > 0)
 		{
 			// inserting after the newIndex item
-			newIndex++;
+			if (newIndex < Elements.Count - 1)
+			{
+				newIndex++;
+			}			
 		}
 
 		Elements.RemoveAt(oldIndex);
