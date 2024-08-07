@@ -4,14 +4,15 @@ A concept application demonstrating specific usage patterns for Blazor, MudBlazo
 
 ## Concepts Demonstrated
 
-* Wrapping `ProtectedBrowserStorage` in a service to enable unit testing of methods using it.
-* Rendering nested hierarchical data for navigation links efficiently. (Note: Child properties are manually wrapped in the Navigation Repository as this application isn't connected to a database.)
-* Implementing `MainLayout.razor` using MudBlazor, including all settings.
-* Applying a custom MudBlazor theme.
-* Implementing a dark/light toggle for the current MudBlazor theme.
-* Displaying a loading screen during application startup.
-* Customizing the `EditTemplate` for `EditMode.Form` (`DataGridEditMode.Form`) to modify specific controls on the automatic dialog form.
-* Utilizing a `MudSwitch` to toggle the DataGrid between group and standard modes.
+* Wrapping `ProtectedBrowserStorage` in a service to enable unit testing of methods using it
+* Rendering nested hierarchical data for navigation links efficiently (Note: Child properties are manually wrapped in the Navigation Repository as this application isn't connected to a database)
+* Implementing `MainLayout.razor` using MudBlazor, including all settings
+* Applying a custom MudBlazor theme
+* Implementing a dark/light toggle for the current MudBlazor theme
+* Displaying a loading screen during application startup
+* Customizing the `EditTemplate` for `EditMode.Form` (`DataGridEditMode.Form`) to modify specific controls on the automatic dialog form
+* Utilizing a `MudSwitch` to toggle the DataGrid between group and standard modes
+* Row Drag and Drop functionality inside a MudGrid example
 
 ## Resources
 
