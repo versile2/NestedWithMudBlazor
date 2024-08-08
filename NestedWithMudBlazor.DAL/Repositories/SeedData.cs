@@ -27,10 +27,10 @@ namespace NestedWithMudBlazor.DAL.Repositories
                             OrderById = 9,
                 },
 
-				// Investigation Database Navigation
+				// INested MudList Navigation
 						new() {
                             NavLinkId = 3,
-                            Title = "Investigation Database",
+                            Title = "Nested",
                             Icon = Icons.Material.Filled.Anchor,
                             Role = "adminrole,investigativerole",
                             OrderById = 1
@@ -75,34 +75,14 @@ namespace NestedWithMudBlazor.DAL.Repositories
                             OrderById = 0,
                             ParentId = 7,
                 },
-                // Investigation Database Navigation Sub 1
+                // Nested MudList Sub 1
                         new()
                         {
                             NavLinkId = 9,
-                            Title = "Incident Tracking",
+                            Title = "MudList",
                             ParentId = 3,
-                            Href="investigationdatabase",
-                            Role = "adminrole,investigativerole",
-                            OrderById=0,
-                },
-                // Investigation Database Navigation Sub 2
-                        new()
-                        {
-                            NavLinkId = 10,
-                            Title = "Edit Agencies",
-                            ParentId = 3,
-                            Href="addedittrackeragency",
-                            Role = "adminrole,investigativerole",
-                            OrderById=0,
-                },
-                 // Investigation Database Navigation Sub 3
-						new()
-                        {
-                            NavLinkId = 11,
-                            Title = "Edit Employees",
-                            ParentId = 3,
-                            Href="addedittrackerentity",
-                            Role = "adminrole,investigativerole",
+                            Href="nestedmudlist",
+                            Role = "",
                             OrderById=0,
                 },
                  // DRS
