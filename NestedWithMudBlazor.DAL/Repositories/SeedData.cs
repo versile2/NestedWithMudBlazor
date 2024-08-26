@@ -98,5 +98,44 @@ namespace NestedWithMudBlazor.DAL.Repositories
             };
             return navigations.OrderBy(x => x.NavLinkId).ToList();
         }
+
+        public static List<ExerciseType> GetExerciseTypes()
+        {
+            return
+                [
+                new ExerciseType(1, "Run"),
+                new ExerciseType(2, "Bike"),
+                new ExerciseType(3, "Swim")
+                ];
+        }
+
+        public static List<ExerciseTemplate> GetExercises()
+        {
+            return
+            [
+                new ExerciseTemplate
+                {
+                    Id = 1,
+                    Number = 101,
+                    Name = "Exercise 101",
+                    Description = "This is a description of Exercise 101.",
+                    Types = new int[]
+                        {
+                            1,2
+                        }
+                },
+                new ExerciseTemplate
+                {
+                    Id = 2,
+                    Number = 102,
+                    Name = "Exercise 102",
+                    Description = "This is a description of Exercise 102.",
+                    Types = new int[]
+                        {
+                            3
+                        }
+                },
+            ];
+        }
     }
 }

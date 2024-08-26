@@ -1,98 +1,41 @@
 ﻿@page "/Nested_DG"
+@using NestedWithMudBlazor.DAL.Repositories
+@inject ExerciseRepository _expRepo
 
-<MudDataGrid T="GetExerciseTemplateDto" Items="getExercises" EditMode="DataGridEditMode.Form"
-             Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.OnRowClick">
+<MudDataGrid T="ExerciseTemplate" Items="allExercises" ReadOnly="false"
+             EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.OnRowClick" 
+             Bordered="true" Dense="true">
     <Columns>
         <PropertyColumn Property="x => x.Number" />
         <PropertyColumn Property="x => x.Name" />
         <PropertyColumn Property="x => x.Description" />
-        <TemplateColumn>
+        <TemplateColumn Title="Types">
             <CellTemplate>
-                <MudText Typo="Typo.body1">
-                    @string.Join(", ", context.Item.Types.Select(t => t.Type))
-                </MudText>
+                <MudChipSet>
+                    @foreach (var item in context.Item.Types)
+                    {
+                        <MudChip Size="Size.Small">@exercises.Find(x => x.Id == item)!.Name</MudChip>
+                    }
+                </MudChipSet>
             </CellTemplate>
             <EditTemplate>
-                <MudSelect T="GetExerciseTypeDto" @bind-SelectedValues="context.Item.Types"
-                           MultiSelection="true">
-                    @foreach (var exerciseType in allExerciseTypes)
-                    {
-                        <MudSelectItem T="GetExerciseTypeDto" Value="exerciseType">
-                            @exerciseType.Type
-                        </MudSelectItem>
-                    }
-                </MudSelect>
+                <ExerciseTypesDDL TypeList="@exercises" Exercise="context.Item" />
             </EditTemplate>
         </TemplateColumn>
     </Columns>
 </MudDataGrid>
 
 @code {
+    private MudDataGrid<ExerciseTemplate> dgExercise {get;set;} = default!;
+    private bool dgReadOnly { get; set; } = true;
+    private List<ExerciseTemplate> allExercises = [];
+    private List<ExerciseType> exercises = [];
+
     protected override void OnInitialized()
     {
-
+        allExercises = _expRepo.GetExercises();
+        exercises = _expRepo.GetExerciseTypes();
         base.OnInitialized();
     }
 
-
-    List<GetExerciseTypeDto> allExerciseTypes = new List<GetExerciseTypeDto>
-    {
-        new GetExerciseTypeDto { Id = 1, Type = "Run" },
-        new GetExerciseTypeDto { Id = 2, Type = "Bike" },
-        new GetExerciseTypeDto { Id = 3, Type = "Swim" }
-    };
-
-    IEnumerable<GetExerciseTemplateDto> getExercises = new List<GetExerciseTemplateDto>
-    {
-        new GetExerciseTemplateDto
-        {
-            Id = 1,
-            Number = 101,
-            Name = "Exercise 101",
-            Description = "This is a description of Exercise 101.",
-            Types = new List<GetExerciseTypeDto>
-            {
-                new GetExerciseTypeDto
-                {
-                    Id = 1,
-                    Type = "Run"
-                },
-                new GetExerciseTypeDto
-                {
-                    Id = 2,
-                    Type = "Bike"
-                }
-            }
-        },
-        new GetExerciseTemplateDto
-        {
-            Id = 2,
-            Number = 102,
-            Name = "Exercise 102",
-            Description = "This is a description of Exercise 102.",
-            Types = new List<GetExerciseTypeDto>
-            {
-                new GetExerciseTypeDto
-                {
-                    Id = 3,
-                    Type = "Swim"
-                }
-            }
-        }
-    };
-
-    public class GetExerciseTemplateDto
-    {
-        public int Id { get; set; }
-        public int Number { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public IEnumerable<GetExerciseTypeDto> Types { get; set; }
-    }
-
-    public class GetExerciseTypeDto
-    {
-        public int Id { get; set; }
-        public string Type { get; set; }
-    }
 }

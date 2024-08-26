@@ -11,6 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Components\ExerciseTypesDDL.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
     <Content Update="Components\Loading.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
