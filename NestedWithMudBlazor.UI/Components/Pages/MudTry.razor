@@ -1,0 +1,156 @@
+﻿@page "/MudTry"
+
+<MudTabs @key="_counter" Elevation="1" Rounded="true" @ref="tabs" @bind-ActivePanelIndex="_index">
+    @foreach (var tab in _tabs)
+    {
+        <MudTabPanel ID="@tab.Id" TabWrapperContent="@TabWrapperFor(tab)" Visible="@(tab.Id != "pn_last" || _dropTab != null)">
+            <TabContent>
+                <span style="@(tab.Id != "pn_last" ? "" : "display: none;")">@tab.Title</span>
+            </TabContent>
+            <ChildContent>
+                @tab.Content
+            </ChildContent>
+        </MudTabPanel>
+    } <!-- need one at the end so you can drag over the last tab -->
+</MudTabs>
+
+<MudSwitch @bind-Value="_isDragging" ReadOnly>Dragging</MudSwitch>
+<MudText>DropTab: @(_dropTab?.Title ?? "None")</MudText>
+<MudText GutterBottom="true" Align="Align.Center" Class="mt-8"><b>Set Active by Index</b></MudText>
+<div class="d-flex justify-center">
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => Activate(0)">Index 0</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => Activate(1)" Class="mx-2">Index 1</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => Activate(2)">Index 2</MudButton>
+</div>
+
+<MudText GutterBottom="true" Align="Align.Center" Class="mt-4"><b>Set Active by Instance</b></MudText>
+<div class="d-flex justify-center">
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="MoveFirstToLast" Class="mx-2">Move First To Last</MudButton>
+</div>
+
+<MudText GutterBottom="true" Align="Align.Center" Class="mt-4"><b>Set Active by TabPanel ID</b></MudText>
+<div class="d-flex justify-center">
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick='() => Activate("pn_one")'>Item One</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick='() => Activate("pn_two")' Class="mx-2">Item Two</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick='() => Activate("pn_three")'>Item Three</MudButton>
+</div>
+
+<style>
+    .custom-tab-border-left {
+    border-left: 4px solid var(--mud-palette-primary);
+    }
+</style>
+
+@code {
+#nullable enable
+    private MudTabs? tabs;
+    private List<TabModel> _tabs = [];
+    private int _index = 0;
+    private int _counter = 0;
+
+    private TabModel? _dragTab;
+    private TabModel? _dropTab;
+    private bool _isDragging;
+
+    protected override void OnInitialized()
+    {
+        _tabs = new()
+        {
+            new TabModel { Id = "pn_one", Title = "Tab 1", Content = @<div>Content for Tab 1</div> },
+            new TabModel { Id = "pn_two", Title = "Tab 2", Content = @<div>Content for Tab 2</div> },
+            new TabModel { Id = "pn_three", Title = "Tab 3", Content = @<div>Content for Tab 3</div> }
+            };
+        _tabs.Add(new TabModel { Id = "pn_last", Title = @"...", Content = @<div>...</div> });
+    }
+
+    private RenderFragment<RenderFragment> TabWrapperFor(TabModel tab) => (childContent) =>
+    @<div class="@(tab.IsDragOver ? "custom-tab-border-left" : "")"
+              draggable="true" title="@tab.Title"
+              @ondrop:preventDefault
+              @ondrop="() => OnDrop(tab)"
+              @ondragenter="() => StartDrag(tab)"
+              @ondragleave="() => EndDrag(tab)"
+              @ondragover:preventDefault
+              @ondragover="() => OnDragOver(tab)"
+              @ondragend="() => OnDragEnd()">
+        @childContent
+    </div>
+    ;
+
+    private void OnDragEnd()
+    {
+        if (_dragTab != null)
+        {
+            _dragTab.IsDragOver = false;
+            _dragTab = null;
+        }
+        if (_dropTab != null)
+        {
+            _dropTab.IsDragOver = false;
+            _dropTab = null;
+        }
+        _counter++;
+    }
+
+    private void StartDrag(TabModel tab)
+    {
+        _isDragging = true;
+        _dragTab = tab;
+        tab.IsDragOver = true;
+    }
+
+    private void EndDrag(TabModel tab)
+    {
+        _isDragging = false;        
+        tab.IsDragOver = false;
+    }
+
+    private void OnDragOver(TabModel tab)
+    {
+        _isDragging = true;
+        _dropTab = tab;
+        tab.IsDragOver = true;
+    }
+
+    private void OnDrop(TabModel? tab)
+    {
+        if (_dragTab == null || _dropTab == null) return;
+
+        _tabs.Remove(_dragTab);
+        var insertIndex = _tabs.FindIndex(t => t.Id == _dropTab.Id);
+        _tabs.Insert(insertIndex < 0 ? 0 : insertIndex, _dragTab);
+
+        _isDragging = false;        
+        Console.WriteLine("Drop");
+    }
+
+    private void MoveFirstToLast()
+    {
+        if (_tabs.Count > 1)
+        {
+            var first = _tabs[0];
+            _tabs.RemoveAt(0);
+            _tabs.Add(first);
+        }
+    }
+
+    private void Activate(int index)
+    {
+        _index = index;
+    }
+
+    private void Activate(object id)
+    {
+        tabs?.ActivatePanel(id);
+    }
+
+    private TabModel tab => _tabs.FirstOrDefault() ?? new();
+
+    public class TabModel
+    {
+        public string Id { get; set; } = default!;
+        public string Title { get; set; } = default!;
+        public bool IsDragOver { get; set; }
+        public RenderFragment Content { get; set; } = default!;
+    }
+}
