@@ -1,0 +1,28 @@
+﻿@using System.Linq
+
+<MudSelect T="string" SelectedValues="SelectedTypeNames" SelectedValuesChanged="OnSelectedValuesChanged" MultiSelection="true">
+    @foreach (var exerciseType in TypeList)
+    {
+        <MudSelectItem T="string" Value="@exerciseType.Name">@exerciseType.Name</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    [Parameter]
+    public List<ExerciseType> TypeList { get; set; } = default!;
+
+    [Parameter]
+    public ExerciseTemplate Exercise { get; set; } = default!;
+
+    private IEnumerable<string> SelectedTypeNames
+    {
+        get => TypeList.Where(t => Exercise.Types.Contains(t.Id)).Select(t => t.Name);
+        set => Exercise.Types = TypeList.Where(t => value.Contains(t.Name)).Select(t => t.Id).ToArray();
+    }
+
+    private void OnSelectedValuesChanged(IEnumerable<string> selectedValues)
+    {
+        SelectedTypeNames = selectedValues;
+        StateHasChanged();
+    }
+}

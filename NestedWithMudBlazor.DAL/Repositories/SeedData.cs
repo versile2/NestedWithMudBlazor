@@ -89,9 +89,9 @@ namespace NestedWithMudBlazor.DAL.Repositories
 						new()
                         {
                             NavLinkId = 12,
-                            Title = "DRS",
-                            Href="drs",
-                            Role = "adminrole,drsrole",
+                            Title = "Nested DataGrid",
+                            Href="Nested_DG",
+                            Role = "",
                             OrderById=2,
                             Icon = $"<path d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M12 11.55C9.64 9.35 6.48 8 3 8v11c3.48 0 6.64 1.35 9 3.55 2.36-2.19 5.52-3.55 9-3.55V8c-3.48 0-6.64 1.35-9 3.55zM12 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z\"/>",
                 },
@@ -105,6 +105,45 @@ namespace NestedWithMudBlazor.DAL.Repositories
                 },
             };
             return navigations.OrderBy(x => x.NavLinkId).ToList();
+        }
+
+        public static List<ExerciseType> GetExerciseTypes()
+        {
+            return
+                [
+                new ExerciseType(1, "Run"),
+                new ExerciseType(2, "Bike"),
+                new ExerciseType(3, "Swim")
+                ];
+        }
+
+        public static List<ExerciseTemplate> GetExercises()
+        {
+            return
+            [
+                new ExerciseTemplate
+                {
+                    Id = 1,
+                    Number = 101,
+                    Name = "Exercise 101",
+                    Description = "This is a description of Exercise 101.",
+                    Types = new int[]
+                        {
+                            1,2
+                        }
+                },
+                new ExerciseTemplate
+                {
+                    Id = 2,
+                    Number = 102,
+                    Name = "Exercise 102",
+                    Description = "This is a description of Exercise 102.",
+                    Types = new int[]
+                        {
+                            3
+                        }
+                },
+            ];
         }
     }
 }

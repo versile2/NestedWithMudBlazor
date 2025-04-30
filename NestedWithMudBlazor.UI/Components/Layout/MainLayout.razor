@@ -25,14 +25,13 @@
 		@if (!DoNotRenderForUnitTest)
 		{
 					<NavMenu @key="_navKey" DrawerOpen="@DrawerOpen"></NavMenu>
-					<NotificationsDisplay></NotificationsDisplay>
 					<MudMainContent Class="mt-12 pa-4">
 			<ErrorBoundary>
 				<ChildContent>
 					@Body
 				</ChildContent>
-				<ErrorContent>
-					<Error />
+				<ErrorContent Context="exception">
+					<Error Exception="exception" />
 				</ErrorContent>
 			</ErrorBoundary>
 			</MudMainContent>

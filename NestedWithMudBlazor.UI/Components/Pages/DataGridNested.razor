@@ -1,0 +1,41 @@
+﻿@page "/Nested_DG"
+@using NestedWithMudBlazor.DAL.Repositories
+@inject ExerciseRepository _expRepo
+
+<MudDataGrid T="ExerciseTemplate" Items="allExercises" ReadOnly="false"
+             EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.OnRowClick" 
+             Bordered="true" Dense="true">
+    <Columns>
+        <PropertyColumn Property="x => x.Number" />
+        <PropertyColumn Property="x => x.Name" />
+        <PropertyColumn Property="x => x.Description" />
+        <TemplateColumn Title="Types">
+            <CellTemplate>
+                <MudChipSet>
+                    @foreach (var item in context.Item.Types)
+                    {
+                        <MudChip Size="Size.Small">@exercises.Find(x => x.Id == item)!.Name</MudChip>
+                    }
+                </MudChipSet>
+            </CellTemplate>
+            <EditTemplate>
+                <ExerciseTypesDDL TypeList="@exercises" Exercise="context.Item" />
+            </EditTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
+
+@code {
+    private MudDataGrid<ExerciseTemplate> dgExercise {get;set;} = default!;
+    private bool dgReadOnly { get; set; } = true;
+    private List<ExerciseTemplate> allExercises = [];
+    private List<ExerciseType> exercises = [];
+
+    protected override void OnInitialized()
+    {
+        allExercises = _expRepo.GetExercises();
+        exercises = _expRepo.GetExerciseTypes();
+        base.OnInitialized();
+    }
+
+}

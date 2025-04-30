@@ -12,15 +12,10 @@
 </MudText>
 
 <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(_ => { Manager.NavigateTo(Manager.Uri, true); })">Continue</MudButton>
-
-@code{
-
-	protected override void OnAfterRender(bool firstRender)
-	{
-		if (firstRender)
-		{
-			StateHasChanged();
-		}
-	}
-
+@if (!string.IsNullOrEmpty(_message))
+{
+	<MudPaper>
+		<MudText Typo="Typo.subtitle2">@_message</MudText>
+		<MudText Typo="Typo.body2">@_stackTrace</MudText>
+	</MudPaper>
 }

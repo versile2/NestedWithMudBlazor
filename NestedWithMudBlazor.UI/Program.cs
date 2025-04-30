@@ -25,6 +25,7 @@ builder.Services.AddMudServicesWithExtensions(config =>
 
 builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
 builder.Services.AddScoped<INavigationRepository, NavigationRepository>();
+builder.Services.AddScoped<ExerciseRepository, ExerciseRepository>();
 
 var app = builder.Build();
 
